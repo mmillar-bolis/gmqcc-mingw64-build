@@ -1,0 +1,9 @@
+*.o
+*.d
+*.ini
+*.exe
+
+gmqcc.exe
+qcvm.exe
+
+bin/
