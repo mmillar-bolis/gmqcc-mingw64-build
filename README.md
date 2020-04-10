@@ -1,7 +1,9 @@
 # gmqcc MINGW64 Builds
 A small project to compile and prepare the gmqcc compiler for Windows.
 
-## Quick and Dirty Instructions
+[Download Gmqcc Builds Here!](https://github.com/mmillar-bolis/gmqcc-mingw64-build/releases) Or build it yourself by following the below instructions.
+
+## Compile Instructions
 Use [MSys2](https://www.msys2.org/) (Or [go here](http://repo.msys2.org/distrib/x86_64/) for just the base package), run through setup and then invoke a MinGW64 shell. Install the following packages:
 
 ```
