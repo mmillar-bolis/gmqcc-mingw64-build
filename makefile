@@ -15,7 +15,13 @@ WINDOWS=1
 endif
 
 # Include additional headers.
-INCLUDEDIR=$(CURDIR)/include
+INCLUDEDIR = $(CURDIR)/include
+
+# Surce directory
+SRCDIR = $(CURDIR)/src
+
+# Output directory
+BINDIR = $(CURDIR)/bin
 
 # Specify C++ Compiler
 CXX ?= clang++
@@ -36,34 +42,39 @@ RC = windres
 
 # Resources to build the compiler
 CSRCS = \
-	src/ast.cpp \
-	src/code.cpp \
-	src/conout.cpp \
-	src/fold.cpp \
-	src/ftepp.cpp \
-	src/intrin.cpp \
-	src/ir.cpp \
-	src/lexer.cpp \
-	src/main.cpp \
-	src/opts.cpp \
-	src/parser.cpp \
-	src/stat.cpp \
-	src/utf8.cpp \
-	src/util.cpp
+	$(SRCDIR)/ast.cpp \
+	$(SRCDIR)/code.cpp \
+	$(SRCDIR)/conout.cpp \
+	$(SRCDIR)/fold.cpp \
+	$(SRCDIR)/ftepp.cpp \
+	$(SRCDIR)/intrin.cpp \
+	$(SRCDIR)/ir.cpp \
+	$(SRCDIR)/lexer.cpp \
+	$(SRCDIR)/main.cpp \
+	$(SRCDIR)/opts.cpp \
+	$(SRCDIR)/parser.cpp \
+	$(SRCDIR)/stat.cpp \
+	$(SRCDIR)/utf8.cpp \
+	$(SRCDIR)/util.cpp
 
 # Resources to build the testsuite
 TSRCS = \
-	src/conout.cpp \
-	src/opts.cpp \
-	src/stat.cpp \
-	src/test.cpp \
-	src/util.cpp
+	$(SRCDIR)/conout.cpp \
+	$(SRCDIR)/opts.cpp \
+	$(SRCDIR)/stat.cpp \
+	$(SRCDIR)/test.cpp \
+	$(SRCDIR)/util.cpp
 
 # Resources to build the vmm
 VSRCS = \
-	src/exec.cpp \
-	src/stat.cpp \
-	src/util.cpp
+	$(SRCDIR)/exec.cpp \
+	$(SRCDIR)/stat.cpp \
+	$(SRCDIR)/util.cpp
+
+WINDLLS = \
+	/mingw64/bin/libgcc_s_seh-1.dll \
+	/mingw64/bin/libstdc++-6.dll \
+	/mingw64/bin/libwinpthread-1.dll
 
 # Object files to have same name as source files, but swap the extension.
 COBJS = $(CSRCS:.cpp=.o)
@@ -102,15 +113,26 @@ test: $(CBIN) $(VBIN) $(TBIN)
 	@./$(TBIN)
 endif
 
+# Throw some messy opposite logic in while I figure out a better flow for my
+# additional needs.
+ifdef WINDOWS
+bundle:
+	mkdir $(BINDIR)
+	mv $(CBIN) $(BINDIR)
+	mv $(VBIN) $(BINDIR)
+	cp $(WINDLLS) $(BINDIR)
+	cp $(SRCDIR)/gmqcc.ini.example $(BINDIR)/gmqcc.ini
+endif
+
 # Pattern rule to compile source files into objects.
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # If not Windows, also compile testsuite
 ifndef WINDOWS
-all: $(CBIN) $(QCVM) $(TBIN)
+all: $(CBIN) $(VBIN) $(TBIN)
 else
-all: $(CBIN) $(QCVM)
+all: $(CBIN) $(VBIN)
 endif
 
 
@@ -118,6 +140,7 @@ clean:
 	rm -f *.d
 	rm -f $(COBJS) $(CDEPS) $(CBIN)
 	rm -f $(VOBJS) $(VDEPS) $(VBIN)
+	rm -rf $(BINDIR)
 ifndef WINDOWS
 	rm -f $(TOBJS) $(TDEPS) $(TOBJS)
 endif
