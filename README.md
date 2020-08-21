@@ -28,5 +28,4 @@ pacman --sync --needed autoconf automake gcc gmp-devel libtool make mingw-w64-x8
 From there, just cd into this directory and run `make all`. Additionally, run `make bundle` to produce a bin directory with the freshly compiled exes and their library dependencies.
 
 ## TODO
-- Add PE manifest to exe during build
 - Convert man docs from man to ps and then to either chm or pdf
