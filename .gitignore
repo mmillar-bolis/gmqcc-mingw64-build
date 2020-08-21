@@ -2,8 +2,10 @@
 *.d
 *.ini
 *.exe
+doc/*.txt
 
 gmqcc.exe
 qcvm.exe
 
 bin/
+temp/
