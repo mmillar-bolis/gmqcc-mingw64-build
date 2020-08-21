@@ -30,6 +30,7 @@ CXX ?= clang++
 # Build artifact directories
 OBJDIR := temp/objs
 DEPDIR := temp/deps
+RESDIR := temp/res
 INCDIR := include
 BINDIR := bin
 
@@ -77,6 +78,7 @@ CXXFLAGS += -Wno-implicit-fallthrough
 CXXFLAGS += -std=c++11
 CXXFLAGS += -I$(SRCDIR)
 CXXFLAGS += -I$(INCDIR)
+CXXFLAGS += -I$(RESDIR)
 CXXFLAGS += -I$(CURDIR)
 
 # Disable some unneeded features.
@@ -172,19 +174,27 @@ $(DEPDIR):
 	@mkdir -p $(DEPDIR)
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
+$(RESDIR):
+	@mkdir -p $(RESDIR)
 $(BINDIR):
 	@mkdir -p $(BINDIR)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPDIR)/%.d | $(OBJDIR) $(DEPDIR) $(BINDIR)
+$(RESDIR)/gmqcc.res: $(INCDIR)/gmqcc/resource.rc
+	windres -i "$(INCDIR)/gmqcc/resource.rc" -O coff -o $(RESDIR)/gmqcc.res
+
+$(RESDIR)/qcvm.res: $(INCDIR)/qcvm/resource.rc
+	windres -i "$(INCDIR)/qcvm/resource.rc" -O coff -o $(RESDIR)/qcvm.res
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPDIR)/%.d | $(OBJDIR) $(RESDIR) $(DEPDIR) $(BINDIR)
 	$(CXX) -MT $@ $(DEPFLAGS) -MF $(DEPDIR)/$*.Td $(CXXFLAGS) -c -o $@ $<
 	@mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d
 
-$(GMQCC): $(filter %.o,$(GSRCS:%.cpp=$(OBJDIR)/%.o))
-	$(CXX) $^ $(LDFLAGS) -o $(BINDIR)/$@
+$(GMQCC): $(filter %.o,$(GSRCS:%.cpp=$(OBJDIR)/%.o)) $(RESDIR)/gmqcc.res
+	$(CXX) $^ $(LDFLAGS) $(RESDIR)/gmqcc.res -o $(BINDIR)/$@
 	$(STRIP) $(BINDIR)/$@
 
-$(QCVM): $(filter %.o,$(QSRCS:%.cpp=$(OBJDIR)/%.o))
-	$(CXX) $^ $(LDFLAGS) -o $(BINDIR)/$@
+$(QCVM): $(filter %.o,$(QSRCS:%.cpp=$(OBJDIR)/%.o)) $(RESDIR)/qcvm.res
+	$(CXX) $^ $(LDFLAGS) $(RESDIR)/qcvm.res -o $(BINDIR)/$@
 	$(STRIP) $(BINDIR)/$@
 
 $(TESTSUITE): $(filter %.o,$(TSRCS:%.cpp=$(OBJDIR)/%.o))
