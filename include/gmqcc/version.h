@@ -12,8 +12,8 @@
 // Local definitions
 #define VER_COMPANYNAME_STR "Dale Weiler, Wolfgang Bumiller"
 #define VER_FILEDESCRIPTION_STR "An improved QuakeC compiler"
-#define VER_PRODUCTNAME_STR "GMQCC"
-#define VER_INTERNALNAME_STR "GMQCC"
+#define VER_PRODUCTNAME_STR "gmqcc"
+#define VER_INTERNALNAME_STR "gmqcc"
 #define VER_PRODUCTVERSION 0,3,6,0
 #define VER_PRODUCTVERSION_STR "0.3.6.0\0"
 #define VER_FILEVERSION 0,3,6,0

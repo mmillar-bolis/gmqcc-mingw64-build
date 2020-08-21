@@ -12,8 +12,8 @@
 // Local definitions
 #define VER_COMPANYNAME_STR "Dale Weiler, Wolfgang Bumiller"
 #define VER_FILEDESCRIPTION_STR "A standalone QuakeC VM binary executor"
-#define VER_PRODUCTNAME_STR "QCVM"
-#define VER_INTERNALNAME_STR "QCVM"
+#define VER_PRODUCTNAME_STR "qcvm"
+#define VER_INTERNALNAME_STR "qcvm"
 #define VER_PRODUCTVERSION 0,3,6,0
 #define VER_PRODUCTVERSION_STR "0.3.6.0\0"
 #define VER_FILEVERSION 0,3,6,0
