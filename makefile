@@ -199,6 +199,9 @@ endif
 
 ifeq ($(OS),Windows_NT)
 bundle:
+	cp $(SRCDIR)/LICENSE doc/License.txt
+	cp $(SRCDIR)/AUTHORS doc/Authors.txt
+	cp -r doc bin/
 	cp $(WINDLLS) $(BINDIR)
 	cp $(SRCDIR)/gmqcc.ini.example $(BINDIR)/gmqcc.ini
 endif
@@ -207,7 +210,7 @@ test: $(QCVM) $(TESTSUITE)
 	@$(RUNTESTS)
 
 clean:
-	rm -rf $(DEPDIR) $(OBJDIR) temp $(BINDIR) $(GMQCC) $(QCVM)
+	rm -rf $(DEPDIR) $(OBJDIR) temp $(BINDIR) $(GMQCC) $(QCVM) doc/License.txt doc/Authors.txt
 
 .PHONY: test clean $(DEPDIR) $(OBJDIR)
 
